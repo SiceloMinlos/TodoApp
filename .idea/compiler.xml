@@ -9,9 +9,11 @@
         <module name="schedule" />
         <module name="places" />
         <module name="stage" />
-        <module name="common" />
         <module name="web" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="18" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -9,6 +9,9 @@
     <artifactId>stage</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    <modules>
+        <module>../common</module>
+    </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
