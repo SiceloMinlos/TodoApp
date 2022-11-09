@@ -1,6 +1,7 @@
 package wethinkcode.schedule;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import io.javalin.Javalin;
 import wethinkcode.schedule.transfer.DayDO;
 import wethinkcode.schedule.transfer.ScheduleDO;
 import wethinkcode.schedule.transfer.SlotDO;
+import io.javalin.http.Context;
 
 /**
  * I provide a REST API providing the current loadshedding schedule for a
@@ -25,9 +27,22 @@ public class ScheduleService
 
     private int servicePort;
 
+    private String[] provinces;
+
     public static void main( String[] args ){
         final ScheduleService svc = new ScheduleService().initialise();
         svc.start();
+    }
+
+    public boolean validProvince(String province) {
+        provinces = new String[]{"gauteng", "mpumalanga", "free state", "limpopo", "kwakulu-natal", "north west", "northern cape", "western cape", "eastern cape"};
+
+        for (String provin: provinces) {
+            if (province.toLowerCase().equals(provin)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @VisibleForTesting
@@ -52,10 +67,11 @@ public class ScheduleService
 
     public void run(){
         server.start( servicePort );
+        app();
     }
 
     private Javalin initHttpServer(){
-        throw new UnsupportedOperationException( "TODO" );
+        return server = Javalin.create();
     }
 
     // There *must* be a better way than this...
@@ -93,5 +109,22 @@ public class ScheduleService
         final List<SlotDO> slots = Collections.emptyList();
         final List<DayDO> days = Collections.emptyList();
         return new ScheduleDO( days );
+    }
+
+    public void getSchedule(Context context) {
+        context.contentType("application/json");
+        if (validProvince(context.pathParam("province")) && Integer.parseInt(context.pathParam("stage")) <= 6) {
+            context.status(200);
+            context.json(mockSchedule());
+        } else if (Integer.parseInt(context.pathParam("stage")) > 7) {
+            context.status(400);
+        } else {
+            context.status(404);
+            context.json(emptySchedule());
+        }
+    }
+
+    public void app() {
+        server.get("/{province}/{town}/{stage}", this::getSchedule);
     }
 }

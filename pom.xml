@@ -10,6 +10,7 @@
         <module>stage</module>
         <module>schedule</module>
         <module>web</module>
+        <module>common</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -2,6 +2,9 @@ package wethinkcode.stage;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.javalin.Javalin;
+import io.javalin.http.Context;
+import org.json.JSONObject;
+import java.util.HashMap;
 
 /**
  * I provide a REST API that reports the current loadshedding "stage". I provide
@@ -32,6 +35,8 @@ public class StageService
 
     private int servicePort;
 
+    private StageDO stageDO;
+
     @VisibleForTesting
     StageService initialise(){
         return initialise( DEFAULT_STAGE );
@@ -40,6 +45,8 @@ public class StageService
     @VisibleForTesting
     StageService initialise( int initialStage ){
         loadSheddingStage = initialStage;
+        stageDO = new StageDO(initialStage);
+
         assert loadSheddingStage >= 0;
 
         server = initHttpServer();
@@ -62,9 +69,43 @@ public class StageService
 
     public void run(){
         server.start( servicePort );
+        app();
     }
 
     private Javalin initHttpServer(){
-        throw new UnsupportedOperationException( "TODO" );
+        return server = Javalin.create();
+    }
+
+    public void getLoadSheddingStage(Context context) {
+        context.contentType("application/json");
+        HashMap<String, Integer> loadSheddingMap = new HashMap<>();
+
+        initialise(stageDO.getStage());
+
+        loadSheddingMap.put("stage", stageDO.getStage());
+        context.json(loadSheddingMap);
+
+    }
+
+    public void postLoadSheddingStage(Context context) {
+        context.contentType("application/json");
+        HashMap<String, Integer> loadSheddingMap = new HashMap<>();
+        JSONObject jsonObject = new JSONObject(context.body());
+
+        int stage = jsonObject.getInt("stage");
+
+        if (stage < 0) {
+            context.status(400);
+        } else {
+            initialise(stage);
+            loadSheddingMap.put("stage", stageDO.getStage());
+            context.json(loadSheddingMap);
+        }
+
+    }
+
+    public void app() {
+        this.server.get("/stage", this::getLoadSheddingStage);
+        this.server.post("/stage", this::postLoadSheddingStage);
     }
 }
