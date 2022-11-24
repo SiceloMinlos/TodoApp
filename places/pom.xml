@@ -7,7 +7,7 @@
         <version>1.0</version>
     </parent>
     <artifactId>places</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -35,6 +35,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.13.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
         </dependency>
     </dependencies>
     <build>

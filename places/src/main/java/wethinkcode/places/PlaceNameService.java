@@ -56,7 +56,7 @@ public class PlaceNameService implements Runnable {
     public static void main( String[] args ){
         final PlaceNameService svc = new PlaceNameService().initialise();
         final int exitCode = new CommandLine( svc ).execute( args );
-        System.exit( exitCode );
+//        System.exit( exitCode );
     }
 
     // Instance state
@@ -81,7 +81,7 @@ public class PlaceNameService implements Runnable {
     private File dataDir;
 
     @Option( names = { "-f", "--datafile" }, description = "CSV Data file path" )
-    private File dataFile;
+    private File dataFile = new File("places/resources/PlaceNamesZA2008.csv");
 
     @Option( names = { "-p", "--port" }, description = "Service network port number" )
     private int svcPort;
@@ -165,7 +165,7 @@ public class PlaceNameService implements Runnable {
 
     private Javalin initHttpServer(){
         return Javalin.create()
-            .get( "/provinces", ctx -> ctx.json( places.provinces() ))
+            .get( "/provinces", ctx -> ctx.json( places.provinces()))
             .get( "/towns/{province}", this::getTowns );
     }
 

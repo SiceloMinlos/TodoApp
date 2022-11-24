@@ -8,10 +8,7 @@
     </parent>
     <artifactId>schedule</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <modules>
-        <module>../common</module>
-    </modules>
+    <packaging>pom</packaging>
     <properties>
         <exec.mainClass>wethinkcode.schedule.ScheduleService</exec.mainClass>
     </properties>
@@ -53,6 +50,12 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20220320</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>wethinkcode</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
 

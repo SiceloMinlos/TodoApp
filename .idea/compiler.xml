@@ -6,14 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="schedule" />
-        <module name="places" />
-        <module name="stage" />
-        <module name="web" />
+        <module name="common" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="common" target="18" />
-    </bytecodeTargetLevel>
   </component>
 </project>

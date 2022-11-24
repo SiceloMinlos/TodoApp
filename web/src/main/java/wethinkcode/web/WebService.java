@@ -2,6 +2,15 @@ package wethinkcode.web;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.javalin.Javalin;
+import io.javalin.http.staticfiles.Location;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.Buffer;
 
 /**
  * I am the front-end web server for the LightSched project.
@@ -13,7 +22,7 @@ import io.javalin.Javalin;
 public class WebService
 {
 
-    public static final int DEFAULT_PORT = 80;
+    public static final int DEFAULT_PORT = 8000;
 
     public static void main( String[] args ){
         final WebService svc = new WebService().initialise();
@@ -26,7 +35,10 @@ public class WebService
 
     @VisibleForTesting
     WebService initialise(){
-        // TODO: add http client and server configuration here
+        this.server = Javalin.create(javalinConfig -> {
+            javalinConfig.addStaticFiles("/templates", Location.CLASSPATH);
+        });
+//        configureHttpClient();
         return this;
     }
 
@@ -49,10 +61,20 @@ public class WebService
     }
 
     private void configureHttpClient(){
-        throw new UnsupportedOperationException( "TODO" );
+        try {
+            BufferedReader bufferedReader = null;
+            URL url = new URL("http://localhost:7000/provinces");
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            System.out.println(http.getResponseCode() + " " + http.getResponseMessage());
+            bufferedReader = new BufferedReader(new InputStreamReader(http.getInputStream()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Javalin configureHttpServer(){
         throw new UnsupportedOperationException( "TODO" );
     }
+
+
 }

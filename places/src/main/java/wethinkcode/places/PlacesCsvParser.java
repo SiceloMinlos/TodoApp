@@ -77,7 +77,11 @@ public class PlacesCsvParser
 
     @VisibleForTesting
     boolean isLineAWantedFeature( String[] csvValue ){
-        return WANTED_FEATURES.contains( csvValue[FEATURE_COLUMN].toLowerCase() );
+        try {
+            return WANTED_FEATURES.contains( csvValue[FEATURE_COLUMN].toLowerCase() );
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @VisibleForTesting
